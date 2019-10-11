@@ -22,10 +22,10 @@ if t_res < 0:
 
 # Obtener las diferencias
 h_res = t_res // 3600
-t_res -= h_res * 3600
+t_res %= 3600
 
 min_res = t_res // 60
-t_res -= min_res * 60
+t_res %= 60
 
 seg_res = t_res
 

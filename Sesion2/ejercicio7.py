@@ -8,7 +8,7 @@ nombre_compl = nombre + " " + primer_apellido + " " + segundo_apellido
 
 # Mostrar por pantalla el nombre completo y al revés
 print('Su nombre completo es: {}'.format(nombre_compl))
-print('Su nombre completo al revés es: {}'.format(nombre_compl[-1::-1]))
+print('Su nombre completo al revés es: {}'.format(nombre_compl[::-1]))
 
 # Separar el nombre completo
 nom, apel_1, apel_2 = nombre_compl.split()
