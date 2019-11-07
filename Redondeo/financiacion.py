@@ -51,3 +51,10 @@ def calcularCapitalFinal(capitalInicial, interes):
 
     return capital_final
 
+if __name__ == "__main__":
+    print("Se ha cargado el modulo como principal")
+    print(redondear(30.123, 2))
+    print(calcularCapitalFinal(1100.00, 13.15))
+
+if __name__ == "financiacion":
+    print("Se ha importado el modulo financiacion")

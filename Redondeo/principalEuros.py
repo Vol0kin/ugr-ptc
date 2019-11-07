@@ -5,20 +5,38 @@ if __name__ == '__main__':
     capital = 0.0
 
     while capital <= 0.0:
-        capital = float(input('Introduzca el capital inicial: '))
+        try:
+            capital = float(input('Introduzca el capital inicial: '))
+
+            capital_split = str(capital).split('.')
+
+            if len(capital_split) > 1:
+                if len(capital_split[1]) > 2:
+                    capital = 0.0
+        except ValueError:
+            print("Formato incorrecto")
+            capital = 0.0
 
     # Entrada del interes hasta que tenga un valor valido
     interes = 0.0
 
     while interes <= 0.0:
-        interes = float(input('Introduzca el interes anual: '))
+        try:
+            interes = float(input('Introduzca el interes anual: '))
+        except ValueError:
+            print("Formato incorrecto")
+            interes = 0.0
 
 
     # Entrada del numero de años hasta que tenga un valor valido
     anios = 0
 
     while anios <= 0:
-        anios = int(input('Introduzca el numero de años: '))
+        try:
+            anios = int(input('Introduzca el numero de años: '))
+        except ValueError:
+            print("Formato incorrecto")
+            anios = 0
 
 
     # Obtener el capital final

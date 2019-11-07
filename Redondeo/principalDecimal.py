@@ -41,26 +41,64 @@ def calcularCapitalFinal(capitalInicial, interes):
 
     return capital_final
 
+# vemos si el string numero corresponde a un string de entero y max. 2 decimales
+def validarMax2Decimales(numero_string):
+    numeroLista=numero_string.split(".")
+    if len(numeroLista)==1 or (len(numeroLista) >1 and len(numeroLista[1])<3):
+        validacion=True
+    else:
+        validacion=False
+    
+    return validacion
 
 if __name__ == '__main__':
     # Entrada del capital hasta que tenga un valor valido
-    capital = 0.0
+    es_valido = False
 
-    while capital <= 0.0:
-        capital = float(input('Introduzca el capital inicial: '))
+    while not es_valido:
+        try:
+            capital_string = input('Introduzca el capital inicial: ')
+            capital = float(capital_string)
+            assert capital > 0.0, 'El capital inicial debe ser mayor que 0'
+            assert validarMax2Decimales(capital_string), 'El capital inicial debe tener como maximo 2 decimales'
+            print('Capital inicial correcto')
+            es_valido = True
+        except ValueError:
+            print("Formato incorrecto")
+        except AssertionError as error:
+            print(error)
 
     # Entrada del interes hasta que tenga un valor valido
-    interes = 0.0
+    es_valido = False
 
-    while interes <= 0.0:
-        interes = float(input('Introduzca el interes anual: '))
+    while not es_valido:
+        try:
+            interes_string = input('Introduzca el interes anual: ')
+            interes = float(interes_string)
+            assert interes > 0.0, 'El interes anual debe ser mayor que 0'
+            assert validarMax2Decimales(interes_string), 'El interes anual debe tener max 2 decimales'
+            print('Interes valido')
+            es_valido = True
+        except ValueError:
+            print("Formato incorrecto")
+        except AssertionError as error:
+            print(error)
 
 
     # Entrada del numero de años hasta que tenga un valor valido
+    es_valid = False
     anios = 0
 
-    while anios <= 0:
-        anios = int(input('Introduzca el numero de años: '))
+    while not es_valido:
+        try:
+            anios = int(input('Introduzca el numero de años: '))
+            assert anios > 0, 'El numero de años debe ser mayor que 0'
+            print('Años validos')
+            ex_valido = True
+        except ValueError:
+            print("Formato incorrecto")
+        except AssertionError as error:
+            print(error)
 
 
     # Crear un objeto decimal que contiene el capital

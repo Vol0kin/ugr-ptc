@@ -1,0 +1,2 @@
+def buscar(palabra, sub):
+
