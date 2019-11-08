@@ -1,12 +1,14 @@
 import csv
 import tempfile
 import numpy as np
+from collections import OrderedDict
 
 def read_csv_file(file_path):
     # Diccionario de salida
     # El diccionario tendra la siguiente estructura:
     # {provincia: {genero: {año: poblacion}}}
-    population_dict = {}
+    # Esta ordenado para conservar el orden de insercion
+    population_dict = OrderedDict()
 
     # Establecer opciones para leer el archivo CSV, como el delimitador
     csv.register_dialect("file_dialect", delimiter=";")
@@ -62,7 +64,7 @@ def read_csv_file(file_path):
             
             # Añadir al diccionario de poblacion, segun la provincia,
             # un diccionario con la poblacion por año por genero
-            population_dict[row[0]] = {gender: {year: pop for year, pop in zip(year_keys, gender_pop[gender])}
-                                       for gender in gender_keys}
+            population_dict[row[0]] = OrderedDict((gender,  OrderedDict((year, pop) for year, pop in zip(year_keys, gender_pop[gender])))
+                                       for gender in gender_keys)
     
     return population_dict
