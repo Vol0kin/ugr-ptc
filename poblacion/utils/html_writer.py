@@ -28,7 +28,7 @@ class HTMLWriter:
         Args:
             title: Titulo que va a tener la pagina
         """
-        self.html += f"""<!DOCTYPE html>
+        self.html = f"""<!DOCTYPE html>
         <html>
             <head>
                 <title>Información Población</title>
@@ -211,19 +211,22 @@ class HTMLWriter:
             f.write(self.html)
     
 
-    def write_variation_table(self, population, title, output):
+    def write_table(self, population, title, output, variation=False, use_genders=False):
         """
-        Metodo para escribir una tabla de variacion de la poblacion
+        Metodo para escribir una tabla sobre una poblacion
 
         Args:
+            population: Informacion sobre la poblacion que se quiere mostrar
             title: Titulo que va a tener la pagina
             output: Archivo de salida
+            variation: Indica si la tabla es de variacion (default False)
+            use_genders: Indica si se tienen que utilizar generos (default False)
         """
         # Inicializar HTML
         self.__init_html(title)
 
         # Escribir header
-        self.__write_header(variation=True)
+        self.__write_header(variation=variation, use_genders=use_genders)
 
         # Escribir valores
         self.__write_values(population)

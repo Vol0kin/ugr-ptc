@@ -104,6 +104,9 @@ class HTMLReader:
         # Obtener elementos con etiqueta <td>
         td_str = self.__find_all_td()
 
+        # Eliminar espacios del final de cada etiqueta
+        td_str = [td.rstrip() for td in td_str]
+
         # Juntar los los codigos de las comunidades con sus nombres
         communities = self.__join_names(td_str)
 

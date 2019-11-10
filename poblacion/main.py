@@ -1,4 +1,4 @@
-import var_poblacion_prov as r1
+from utils import pop_funcs
 from utils import read_csv
 from utils.html_reader import HTMLReader
 from utils.html_writer import HTMLWriter
@@ -11,12 +11,25 @@ if __name__ == "__main__":
     writer = HTMLWriter()
 
     ###########################################################################
-    # R1    
+    # R1
+    ###########################################################################   
     print("Generando informacion sobre las variaciones medias y abosultas de la poblacion de cada provincia...")
-    new_pop = r1.abs_rel_population_variance(population, col_keys)
-    writer.write_variation_table(new_pop, "Variacion de la población de cada provincia entre 2011 y 2017", "variacionProvincias2011-17.htm")
+    new_pop = pop_funcs.abs_rel_population_variance(population, col_keys)
+    writer.write_table(new_pop, "Variación de la población de cada provincia entre 2011 y 2017",
+                       "variacionProvincias2011-17.htm", variation=True)
     print("Información generada!")
 
-    reader = HTMLReader()
+    ###########################################################################
+    # R2
+    ###########################################################################
+    reader.read_html("datos/comunidadesAutonomas.htm")
+    communities = reader.read_communities()
     reader.read_html("datos/comunidadAutonoma-Provincia.htm")
-    print(reader.read_communities_provinces())
+    provinces = reader.read_communities_provinces()
+
+    pop_community = pop_funcs.population_community(population, col_keys, communities, provinces)
+
+    writer.write_table(pop_community, "Población de cada comunidad autónoma entre 2010 y 2017",
+                       "poblacionComAutonomas.htm", use_genders=True)
+
+    

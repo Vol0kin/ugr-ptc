@@ -24,13 +24,10 @@ def abs_rel_population_variance(population, col_keys):
     # Crear diccionario que contendra la informacion de salida
     pop_variation_dict = {}
 
-    # Crear lista con las claves para los tipos de variacion
-    variation_keys = ["Variación absoulta", "Variación relativa"]
-
     # Obtener informacion de salida para cada fila
     for prov, pop_info in population.items():
         # Obtener habitantes
-        pop = np.array([population[prov][k] for k in valid_keys], dtype=np.int)
+        pop = np.array([pop_info[k] for k in valid_keys], dtype=np.int)
 
         # Calcular variaciones
         abs_variation = pop[:-1] - pop[1:]
@@ -43,18 +40,46 @@ def abs_rel_population_variance(population, col_keys):
     return pop_variation_dict
 
 
-def population_community(population, communities, provinces):
+def population_community(population, col_keys, communities, provinces):
+    """
+    Funcion que permite calcular la poblacion total para cada categoria
+    para cada una de las comunidades autonomas especificadas
 
+    Args:
+        population: Informacion sobre la poblacion de cada provincia para cada
+                    categoria
+        col_keys: Claves de las columnas
+        communities: Lista de comunidades autonomas de las que se quiere obtener
+                     informacion sobre la poblacion
+        provinces: Diccionario con las provincias de cada comunidad autonoma
+    
+    Returns:
+        Diccionario con la poblacion para cada categoria para cada una de las comunidades
+        autonomas que se hayan especificado
+    """
     # Crear diccionario de salida
     pop_community = {}
     
 
     # Generar informacion para las comunidades indicadas
     for community in communities:
+        # Obtener la lista de provincias
         provinces_list = provinces[community]
+
+        # Crear lista vacia que contendra la informacion sobre la poblacion
+        # en cada una de las categorias para cada provincia
+        pop_provinces = []
+
         # Obtener informacion de cada provincia
         for province in provinces_list:
-            pop_info = population[province]
-            for gender, years_pop in pop_info.items():
-                pass
+            pop_provinces.append([population[province][k] for k in col_keys])
+        
+        # Convertir los datos en una matriz y sumarlos
+        pop_provinces = np.array(pop_provinces, dtype=np.int)
+        pop = np.sum(pop_provinces, axis=0)
+
+        # Actualizar informacion sobre la comunidad
+        pop_community[community] = {y: p for y, p in zip(col_keys, pop)}
     
+    return pop_community
+            
