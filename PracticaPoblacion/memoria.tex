@@ -1,0 +1,103 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[spanish,es-nodecimaldot]{babel}	% Utilizar español
+\usepackage[utf8]{inputenc}					% Caracteres UTF-8
+\usepackage{graphicx}						% Imagenes
+\usepackage[hidelinks]{hyperref}			% Poner enlaces sin marcarlos en rojo
+\usepackage{fancyhdr}						% Modificar encabezados y pies de pagina
+\usepackage{float}							% Insertar figuras
+\usepackage[textwidth=390pt]{geometry}		% Anchura de la pagina
+\usepackage[nottoc]{tocbibind}				% Referencias (no incluir num pagina indice en Indice)
+\usepackage{enumitem}						% Permitir enumerate con distintos simbolos
+\usepackage[T1]{fontenc}					% Usar textsc en sections
+\usepackage{amsmath}						% Símbolos matemáticos
+
+% Comando para poner el nombre de la asignatura
+\newcommand{\asignatura}{Programación Técnica y Científica}
+\newcommand{\autor}{Vladislav Nikolov Vasilev}
+\newcommand{\titulo}{Práctica 1}
+\newcommand{\subtitulo}{Práctica sobre poblaciones}
+
+% Configuracion de encabezados y pies de pagina
+\pagestyle{fancy}
+\lhead{\autor{}}
+\rhead{\asignatura{}}
+\lfoot{Grado en Ingeniería Informática}
+\cfoot{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}		% Linea cabeza de pagina
+\renewcommand{\footrulewidth}{0.4pt}		% Linea pie de pagina
+
+\begin{document}
+\pagenumbering{gobble}
+
+% Pagina de titulo
+\begin{titlepage}
+
+\begin{minipage}{\textwidth}
+
+\centering
+
+\includegraphics[scale=0.5]{img/ugr.png}\\
+
+\textsc{\Large \asignatura{}\\[0.2cm]}
+\textsc{GRADO EN INGENIERÍA INFORMÁTICA}\\[1cm]
+
+\noindent\rule[-1ex]{\textwidth}{1pt}\\[1.5ex]
+\textsc{{\Huge \titulo\\[0.5ex]}}
+\textsc{{\Large \subtitulo\\}}
+\noindent\rule[-1ex]{\textwidth}{2pt}\\[3.5ex]
+
+\end{minipage}
+
+\vspace{0.5cm}
+
+\begin{minipage}{\textwidth}
+
+\centering
+
+\textbf{Autor}\\ {\autor{}}\\[2.5ex]
+\textbf{Rama}\\ {Computación y Sistemas Inteligentes}\\[2.5ex]
+\vspace{0.3cm}
+
+\includegraphics[scale=0.3]{img/etsiit.jpeg}
+
+\vspace{0.7cm}
+\textsc{Escuela Técnica Superior de Ingenierías Informática y de Telecomunicación}\\
+\vspace{1cm}
+\textsc{Curso 2019-2020}
+\end{minipage}
+\end{titlepage}
+
+\pagenumbering{arabic}
+
+\setlength{\parskip}{1em}
+
+En esta práctica se han realizado todos los apartados. Existe un \textit{script} principal llamado \textit{main.py},
+donde se llaman a todas las funciones necesarias. Estas funciones se encuentran en el directorio \textbf{utils}, formando
+un paquete de Python.
+
+A continuación se procede a indicar qué es cada script y en qué apartados se ha utilizado:
+
+\begin{itemize}
+	\item \textbf{\textit{dir\_check.py}}: Contiene una función que comprueba si existe el directorio \textbf{resultados},
+	y en caso de que no exista, lo crea. Es utilizado por todos los apartados, pero no directamente por \textit{main.py},
+	sino de forma auxiliar.
+	\item \textbf{\textit{graphics.py}}: Contiene funciones para dibujar gráficos. Utilizado en \textbf{R3}, \textbf{R5}
+	y \textbf{R6}.
+	\item \textbf{\textit{html\_reader.py}}: Contiene una clase que permite leer los datos de ficheros HTML y obtener información
+	de ellos. Se usa en todos los apartados menos \textbf{R1}.
+	\item \textbf{\textit{html\_writer.py}}: Contiene una clase que permite escribir los resultados a HTML, incluyendo gráficos
+	de ser necesario. Se usa en todos los apartados.
+	\item \textbf{\textit{pop\_funcs.py}}: Contiene funciones para realizar operaciones sobre la población, como obtener
+	las variaciones, calcular la población por comunidad, determianr las comunidades con mayor población o ver si los
+	valores de variación de dos tablas son iguales. Se usa en todos los apartados.
+	\item \textbf{\textit{read\_csv.py}}: Contiene una función para leer archivos CSV y convertirlos a diccionarios
+	de diccionarios, simulando de esta forma el funcionamiento de \textit{pandas}. Utilizado en \textbf{R1}.
+\end{itemize}
+
+
+
+
+
+\end{document}
+
