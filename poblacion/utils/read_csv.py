@@ -62,7 +62,6 @@ def read_csv_file(file_path):
 
         # Combinar generos y años en una unica clave
         gender_years_keys = [g + y for g in gender_keys for y in year_keys]
-        print(gender_years_keys)
 
         # Procesar cada una de las filas restantes
         for row in reader:

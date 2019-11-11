@@ -106,7 +106,7 @@ class HTMLWriter:
         # En caso contrario escribir parte de generos
         if variation:
             # Establecer cuanto va a ocupar el colspan de la fila de la variacion
-            colspan_var = 7 if not use_genders else 3 * 7
+            colspan_var = 7 if not use_genders else 2 * 7
 
             self.html += f"""
                         <th colspan="{colspan_var}">Variación Absoulta</th>
@@ -117,7 +117,8 @@ class HTMLWriter:
             if use_genders:
                 self.html += f"""
                     <tr>
-                        <th colspan="{colspan_base}">Total</th>
+                        <th colspan="{colspan_base}">Hombres</th>
+                        <th colspan="{colspan_base}">Mujeres</th>
                         <th colspan="{colspan_base}">Hombres</th>
                         <th colspan="{colspan_base}">Mujeres</th>
                     </tr>"""
@@ -131,7 +132,7 @@ class HTMLWriter:
         # Determianar cuantas veces se deben repetir los años
         if variation:
             if use_genders:
-                years_repeat = 6
+                years_repeat = 4
             else:
                 years_repeat = 2
         else:

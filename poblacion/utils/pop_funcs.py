@@ -1,7 +1,7 @@
 import numpy as np
 from collections import Counter
 
-def abs_rel_population_variance(population, col_keys):
+def abs_rel_population_variance(population, col_keys, use_genders=False):
     """
     Funcion para obtener las variaciones absoultas y relativas
     de una poblacion dada
@@ -9,13 +9,18 @@ def abs_rel_population_variance(population, col_keys):
     Args:
         population: Poblacion de la que extraer informacion
         col_keys: Claves de las columnas
+        use_genders: Indica si se debe estraer informacion de los generos
+                     (defualt False)
     
     Returns:
         Diccionario con las variaciones abosultas y relativas para un
         conjunto de años para una determianda poblacion
     """
     # Obtener claves validas
-    valid_keys = [k for k in col_keys if "T" in k]
+    if use_genders:
+        valid_keys = [k for k in col_keys if "H" in k or "M" in k]
+    else:
+        valid_keys = [k for k in col_keys if "T" in k]
 
     # Generar claves de salida combinando los tipos de variacion con col_keys
     var_keys = [k + var for var in ["Abs", "Rel"] for k in valid_keys if "2010" not in k]
@@ -29,11 +34,30 @@ def abs_rel_population_variance(population, col_keys):
         pop = np.array([pop_info[k] for k in valid_keys], dtype=np.int)
 
         # Calcular variaciones
-        abs_variation = pop[:-1] - pop[1:]
-        rel_variation = (abs_variation / pop[1:]) * 100
+        # Dependiendo de si se esta utilizando informacion sobre los generos
+        # o no se hara de una u otra forma
+        if use_genders:
+            # Convertir los datos en una matriz (2, N), donde N es
+            # el numero de años para los que se calculara la variacion
+            pop = pop.reshape(2, -1)
 
+            # Calcular variaciones
+            abs_variation = pop[:, :-1] - pop[:, 1:]
+            rel_variation = (abs_variation / pop[:, 1:]) * 100
+
+            # Hacer que los las variaciones sean vectores 1D
+            # De esta forma se facilita procesamiento posterior
+            abs_variation = abs_variation.flatten()
+            rel_variation = rel_variation.flatten()
+        else:
+            # Calcular variaciones
+            abs_variation = pop[:-1] - pop[1:]
+            rel_variation = (abs_variation / pop[1:]) * 100
+        
+        # Convertir a lista
         variation = abs_variation.tolist() + rel_variation.tolist()
 
+        # Actualizar informacion
         pop_variation_dict[prov] = {year: var for year, var in zip(var_keys, variation)}
     
     return pop_variation_dict

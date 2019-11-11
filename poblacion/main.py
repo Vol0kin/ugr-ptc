@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     pop_community = pop_funcs.population_community(population, col_keys, communities, provinces)
 
-    writer.write_table(pop_community, "Población de cada comunidad autónoma entre 2010 y 2017",
+    writer.write_table(pop_community, "Población de cada Comunidad Autónoma entre 2010 y 2017",
                        "poblacionComAutonomas.htm", use_genders=True)
     
     ###########################################################################
@@ -40,3 +40,10 @@ if __name__ == "__main__":
     graphics.bar_plot_man_woman(pop_community, most_pop_comm, "graficos-barra-hm.png")
     writer.write_table(pop_community, "Población de cada comunidad autónoma entre 2010 y 2017",
                        "poblacionComAutonomas.htm", use_genders=True, img_path="resultados/graficos-barra-hm.png")
+    
+    ###########################################################################
+    # R4
+    ###########################################################################
+    comm_variation = pop_funcs.abs_rel_population_variance(pop_community, col_keys, use_genders=True)
+    writer.write_table(comm_variation, "Variación de la población de cada Comunidad Autónoma entre 2011 y 2017",
+                       "variacionComAutonomas.htm", variation=True ,use_genders=True)
