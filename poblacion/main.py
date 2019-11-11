@@ -1,5 +1,6 @@
 from utils import pop_funcs
 from utils import read_csv
+from utils import graphics
 from utils.html_reader import HTMLReader
 from utils.html_writer import HTMLWriter
 
@@ -31,5 +32,11 @@ if __name__ == "__main__":
 
     writer.write_table(pop_community, "Población de cada comunidad autónoma entre 2010 y 2017",
                        "poblacionComAutonomas.htm", use_genders=True)
-
     
+    ###########################################################################
+    # R3
+    ###########################################################################
+    most_pop_comm = pop_funcs.get_comms_most_mean_population(pop_community, col_keys)
+    graphics.bar_plot_man_woman(pop_community, most_pop_comm, "graficos-barra-hm.png")
+    writer.write_table(pop_community, "Población de cada comunidad autónoma entre 2010 y 2017",
+                       "poblacionComAutonomas.htm", use_genders=True, img_path="resultados/graficos-barra-hm.png")

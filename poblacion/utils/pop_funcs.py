@@ -1,6 +1,5 @@
-from utils import read_csv
-from utils.html_writer import HTMLWriter
 import numpy as np
+from collections import Counter
 
 def abs_rel_population_variance(population, col_keys):
     """
@@ -82,4 +81,46 @@ def population_community(population, col_keys, communities, provinces):
         pop_community[community] = {y: p for y, p in zip(col_keys, pop)}
     
     return pop_community
-            
+
+
+def get_comms_most_mean_population(population, col_keys, num_comms=10):
+    """
+    Funcion para obtener las num_comms comunidades con mayor poblacion media
+
+    Args:
+        population: Estructura de diccionarios que contiene la informacion
+        col_keys: Claves de las columnas
+        num_comms: Numero de comunidades autonomas a obtener (default 10)
+    
+    Returns:
+        Lista con los nombres de las comunidades
+    """
+
+    # Obtener claves poblacion total
+    keys_t = [k for k in col_keys if "T" in k]
+
+    # Crear diccionario que contendra los valores medios de poblacion
+    comm_mean_pop = {}
+
+    # Obtener valores medios para cada comunidad
+    for comm, pop_info in population.items():
+        # Obtener valores de la poblacion para cada uno de los años
+        pop = [pop_info[k] for k in keys_t]
+
+        # Calcular valor medio de la poblacion
+        pop = np.array(pop)
+        pop_mean = np.mean(pop)
+
+        # Actualizar valores
+        comm_mean_pop[comm] = pop_mean
+    
+    # Crear Counter con el diccionario obtenido anteriormente
+    counter_comm = Counter(comm_mean_pop)
+
+    # Obtener elementos mas comunes (aquellos con mayor valor medio)
+    most_pop_comm = counter_comm.most_common(num_comms)
+
+    # Obtener lista de comunidades
+    most_pop_comm_list = [comm[0] for comm in most_pop_comm]
+
+    return most_pop_comm_list

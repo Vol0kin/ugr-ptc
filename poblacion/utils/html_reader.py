@@ -49,7 +49,7 @@ class HTMLReader:
         utilizando para ello BeautifulSoup
 
         Args:
-            html_page: Nombre del ficher que contiene la pagina web a ser procesada
+            html_page: Nombre del fichero que contiene la pagina web a ser procesada
         """
         # Leer el contenido original de la pagina web y guardarlo
         # El formato no es utf-8, por tanto, habra que cambiarlo

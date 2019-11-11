@@ -1,4 +1,4 @@
-import os
+from . import dir_check
 import locale
 from decimal import Decimal, getcontext
 
@@ -181,6 +181,17 @@ class HTMLWriter:
                 </table>"""
     
 
+    def __write_image(self, img_path=None):
+        """
+        Metodo que escribe una imagen dada una ruta, si se especifica
+        alguna
+        """
+        # Escribir imagen si se ha especificado alguna
+        if not img_path is None:
+            self.html += f"""
+            <img src="../{img_path}" alt="Grafico sobre población">""" 
+    
+
     def __write_close_body_html(self):
         """
         Metodo para cerrar las etiquetas <body> y <html>
@@ -191,27 +202,27 @@ class HTMLWriter:
         </html>
         """
     
-    def __write_HTML_output(self, out_file):
+    def __write_HTML_output(self, outfile):
         """
         Metodo para escribir la tabla generada en un fichero de salida
 
         Args:
-            out_file: Fichero de salida
+            outfile: Fichero de salida
         """
 
         # Establecer directorio de salida
         result_dir = "resultados/"
 
         # Crear directorio de salida en caso de que no exista
-        if not os.path.exists(result_dir):
-            os.mkdir(result_dir)
+        dir_check.check_exists_dir(result_dir)        
         
         # Escribir salida al fichero
-        with open(result_dir + out_file, "w", encoding="utf-8") as f:
+        with open(result_dir + outfile, "w", encoding="utf-8") as f:
             f.write(self.html)
     
 
-    def write_table(self, population, title, output, variation=False, use_genders=False):
+    def write_table(self, population, title, output, variation=False,
+                    use_genders=False, img_path=None):
         """
         Metodo para escribir una tabla sobre una poblacion
 
@@ -221,6 +232,7 @@ class HTMLWriter:
             output: Archivo de salida
             variation: Indica si la tabla es de variacion (default False)
             use_genders: Indica si se tienen que utilizar generos (default False)
+            img_path: Ruta de la imagen (default None)
         """
         # Inicializar HTML
         self.__init_html(title)
@@ -233,6 +245,9 @@ class HTMLWriter:
 
         # Cerrar tabla
         self.__write_close_table()
+
+        # Escribir imagen
+        self.__write_image(img_path=img_path)
 
         # Cerrar body y html
         self.__write_close_body_html()
