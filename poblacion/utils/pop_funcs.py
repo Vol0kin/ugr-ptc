@@ -150,3 +150,30 @@ def get_comms_most_mean_population(population, col_keys, num_comms=10):
     most_pop_comm_list = [comm[0] for comm in most_pop_comm]
 
     return most_pop_comm_list
+
+
+def compare_variation_values(orig, result, strict_equal=False):
+    """
+    Funcion para comparar los valores originales de la tabla de variacion de
+    poblacion por provincias con los resultados obtenidos. Los valores
+    se pueden comparar por igualdad estricta (todos tienen que ser iguales),
+    o por valores cercanos en un cierto margen (0.01, debido a posibles errores
+    de redondeo/truncamiento)
+
+    Args:
+        orig: Valores originales
+        result: Valores resultado
+        strict_equal: Indica si los valores deben compararse por igualdad
+                      estricta
+    
+    Returns:
+        True si los valores coinciden con un cierto margen de error o de forma
+        estricta, False en caso contrario
+    """
+    # Determinar si los valores son iguales bien por igualdad o por un cierto margen
+    if strict_equal:
+        are_equal = np.array_equal(orig, result)
+    else:
+        are_equal = np.allclose(orig, result, rtol=0.01)
+
+    return are_equal

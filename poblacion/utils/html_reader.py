@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import tempfile
+import numpy as np
 
 class HTMLReader:
     def __init__(self):
@@ -42,7 +43,7 @@ class HTMLReader:
         return td_str
     
 
-    def read_html(self, html_page):
+    def _read_html(self, html_page):
         """
         Metodo para leer el contenido de una pagina web en un formato
         que no es UTF-8, pasarlo a este formato y guardarlo en el atributo
@@ -66,15 +67,21 @@ class HTMLReader:
             self.html = BeautifulSoup(temp_html.read(), 'html.parser')
     
 
-    def read_communities_provinces(self):
+    def read_communities_provinces(self, html_page):
         """
         Metodo para obtener las comunidades automonas a partir de la
         pagina de entrada
+
+        Args:
+            html_page: Nombre del fichero que contiene la pagina web a ser procesada
 
         Returns:
             Diccionario con las comunidades autonomas y las provincias
             de cada una de ellas
         """
+        # Leer pagina web
+        self._read_html(html_page)
+
         # Obtener elementos con etiqueta <td>
         td_str = self.__find_all_td()        
 
@@ -94,20 +101,53 @@ class HTMLReader:
         return dict_comm_prov
     
     
-    def read_communities(self):
+    def read_communities(self, html_page):
         """
         Metodo para obtener las comunidades autonomas
+
+        Args:
+            html_page: Nombre del fichero que contiene la pagina web a ser procesada
 
         Returns:
             Lista con las comunidades
         """
+        # Leer pagina web
+        self._read_html(html_page)
+        
         # Obtener elementos con etiqueta <td>
         td_str = self.__find_all_td()
 
-        # Eliminar espacios del final de cada etiqueta
+        # Eliminar espacios del final de cada etiqueta (por problemas de
+        # compatibilidad que se pueden dar mas adelante)
         td_str = [td.rstrip() for td in td_str]
 
         # Juntar los los codigos de las comunidades con sus nombres
         communities = self.__join_names(td_str)
 
         return communities
+    
+
+    def read_table_provinces_var(self, html_page):
+        """
+        Metodo para leer una tabla de la variacion de las provincias
+
+        Args:
+            html_page: Nombre del fichero que contiene la pagina web a ser procesada
+
+        Returns:
+            Vector 1D con los valores de variacion
+        """
+        # Leer pagina web
+        self._read_html(html_page)
+        
+        # Obtener elementos con etiqueta <td>
+        td_str = self.__find_all_td()
+
+        # Convertir cada elemento a float, sustituyendo el separador
+        # de miles . por nada y el separador de decimales , por .
+        td_values = list(map(lambda x: float(x.replace('.', '').replace(',', '.')), td_str))
+
+        # Crear vector de salida
+        arr_var_values = np.array(td_values)
+
+        return arr_var_values

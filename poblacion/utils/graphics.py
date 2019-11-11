@@ -98,7 +98,7 @@ def plot_lines_pop_evolution(population, col_keys, most_pop_communities, outfile
 
     # Obtener los años a partir de las claves
     # Se ignora el primer caracter porque es una T
-    years = list(map(int, [y[1:] for y in year_keys]))
+    years = [y[1:] for y in year_keys]
 
     # Limpiar figura (en caso de que se haya dibujado algo antes)
     plt.clf()
@@ -108,7 +108,10 @@ def plot_lines_pop_evolution(population, col_keys, most_pop_communities, outfile
         # Obtener valores de la poblacion y pintarlos
         pop_values = [population[comm][y] for y in year_keys]
         plt.plot(years, pop_values, label=comm)
-
+    
+    # Establecer rotacion de los datos en el eje X
+    plt.xticks(rotation=22.5)
+    
     # Poner etiquetas para cada eje, titulo y leyenda
     # La leyenda se tiene que ajustar
     plt.xlabel("Años")
