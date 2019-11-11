@@ -132,6 +132,6 @@ if __name__ == "__main__":
     
     # Crear tabla de salida con grafico
     writer.write_table(comm_variation_bis,
-                       "Variación de la población de cada Comunidad Autónoma entre 2011 y 2017",
+                       "Variación de la población de cada Comunidad Autónoma BIS entre 2011 y 2017",
                        "variacionComAutonomasBis.htm", variation=True ,use_genders=True,
                        img_path="resultados/graficos-lineas-t-bis.png")
