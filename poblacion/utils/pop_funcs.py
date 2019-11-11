@@ -42,6 +42,7 @@ def abs_rel_population_variance(population, col_keys, use_genders=False):
             pop = pop.reshape(2, -1)
 
             # Calcular variaciones
+            # Se calculan para todos los años a la vez y para cada genero
             abs_variation = pop[:, :-1] - pop[:, 1:]
             rel_variation = (abs_variation / pop[:, 1:]) * 100
 
@@ -51,6 +52,7 @@ def abs_rel_population_variance(population, col_keys, use_genders=False):
             rel_variation = rel_variation.flatten()
         else:
             # Calcular variaciones
+            # Se calculan para todos los años a la vez
             abs_variation = pop[:-1] - pop[1:]
             rel_variation = (abs_variation / pop[1:]) * 100
         
