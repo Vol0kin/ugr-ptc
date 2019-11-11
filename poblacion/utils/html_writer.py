@@ -217,7 +217,7 @@ class HTMLWriter:
         dir_check.check_exists_dir(result_dir)        
         
         # Escribir salida al fichero
-        with open(result_dir + outfile, "w", encoding="utf-8") as f:
+        with open(f"{result_dir}{outfile}", "w", encoding="utf-8") as f:
             f.write(self.html)
     
 

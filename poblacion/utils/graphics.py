@@ -59,4 +59,4 @@ def bar_plot_man_woman(population, most_pop_communities, outfile):
     plt.tight_layout()
 
     # Guardar figura
-    plt.savefig(f"{outdir}/{outfile}")
+    plt.savefig(f"{outdir}{outfile}")
