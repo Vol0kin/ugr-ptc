@@ -19,7 +19,7 @@ import glob
 import re
 
 # Datos de entrada
-nom_fichero = input("Introduzca el nombre del fichero de salida: ")
+nom_fichero = input("Introduzca el nombre del fichero JSON de salida: ")
 dir_salida = input("Introduzca el directorio de salida: ")
 ciclos_lectura = int(input("Introduzca el numero de ciclos de lectura: "))
 segundos = int(input("Introduzca el numero de segundos entre lectura y lectura: "))
@@ -75,6 +75,7 @@ cabecera={"TiempoSleep":segundos,
 
 fichero_laser.write(json.dumps(cabecera)+'\n')
 
+# Ciclo de lectura/escritura
 for iter in range(ciclos_lectura):
     # Obtener coordenadas x,y,z detectadas por laser
     puntosx=[]
@@ -109,7 +110,7 @@ for iter in range(ciclos_lectura):
 
     # Guardar imagen si es en la primera o la ultima iteracion
     if iter == 0 or iter == ciclos_lectura - 1:
-        print(f"\tGuardando imagen en iteracion{iter}")
+        print(f"\tGuardando imagen en iteracion {iter}")
         cv2.imwrite(nom_fich_img + str(iter) + ".jpg", img)
    
 time.sleep(1)

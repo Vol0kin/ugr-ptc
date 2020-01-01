@@ -29,7 +29,7 @@ else:
 
 os.chdir(listaDir[0])
 """
-os.chdir("positivo1")
+os.chdir("positivo2")
 print("Cambiando el directorio de trabajo a: ", os.getcwd())
 
 
@@ -37,7 +37,7 @@ objetos=[]
 """
 with open('datosLaser.json', 'r') as f:
 """
-with open("enPieCerca.json", "r") as f:
+with open("enPieMedio.json", "r") as f:
      for line in f:
         objetos.append(json.loads(line))
 
