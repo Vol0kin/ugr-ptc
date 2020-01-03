@@ -22,7 +22,7 @@ def calcular_perimetro(cluster):
     return perimetro
 
 
-def calcular_anchra(cluster):
+def calcular_anchura(cluster):
     """
     Funcion que calcula la anchura de un conjunto de puntos.
     Es decir, calcula la distancia entre el primer y el ultimo punto.
@@ -77,7 +77,7 @@ def calcular_caracteristicas(cluster):
     """
     perimetro = calcular_perimetro(cluster)
     profundidad = calcular_profundidad(cluster)
-    anchura = calcular_anchra(cluster)
+    anchura = calcular_anchura(cluster)
 
     return perimetro, profundidad, anchura
 
