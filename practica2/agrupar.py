@@ -7,7 +7,7 @@ import glob
 import sys
 
 MIN_PUNTOS = 3
-MAX_PUNTOS = 11
+MAX_PUNTOS = 25
 UMBRAL = 0.03
 
 def obtener_cluster_datos(puntos):
