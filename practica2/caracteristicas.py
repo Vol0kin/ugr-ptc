@@ -82,6 +82,35 @@ def calcular_caracteristicas(cluster):
     return perimetro, profundidad, anchura
 
 
+def generar_caracteristicas_clusters_muestra(clusters):
+    """
+    Funcion que genera las caracteristicas de los clusters de una muestra.
+
+    Args:
+        clusters: Lista de diccionarios que contienen la informacion de los
+                  clusters.
+    
+    Return:
+        Devuelve un array con las caracteristicas
+    """
+    # Crear lista de caracteristicas
+    caracteristicas = []
+
+    # Procesar cada cluster
+    for cluster in clusters:
+        # Obtener puntos
+        puntos_x = np.array(cluster["puntosX"]).reshape(-1,1)
+        puntos_y = np.array(cluster["puntosY"]).reshape(-1,1)
+        puntos = np.concatenate([puntos_x, puntos_y], axis=1)
+
+        # Obtener caracteristicas y añadirlas
+        caracts = calcular_caracteristicas(puntos)
+
+        caracteristicas.append(list(caracts))
+    
+    return np.array(caracteristicas)
+
+
 def generar_caracteristicas_clusters(fich_clust, fich_salida, clase):
     """
     Funcion que genera las caracteristicas para un conjunto de clusters de la

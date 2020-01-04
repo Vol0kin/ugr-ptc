@@ -58,7 +58,7 @@ def obtener_camara_handler(clientID):
     return camhandle
 
 
-def procesar_ciclo(clientID, iter):
+def procesar_ciclo(clientID, segundos, iter):
     """
     Funcion que procesa un ciclo de simulacion. Obtiene los datos y los transforma
     al formato JSON especificado.
@@ -66,6 +66,7 @@ def procesar_ciclo(clientID, iter):
     Args:
         clientID: ID del cliente que ha establecido una conexion con el
                   servidor de V-REP.
+        segundos: Numero de segundos que esperar para procesar los datos.
         iter: Numero de iteracion.
     
     Return:
@@ -157,7 +158,7 @@ if __name__ == "__main__":
     # Ciclo de lectura/escritura
     for iter in range(ciclos_lectura):
         # Obtener lectura y guardarla
-        lectura = procesar_ciclo(clientID, iter)
+        lectura = procesar_ciclo(clientID, segundos, iter)
         fichero_laser.write(json.dumps(lectura)+'\n')
         
         # Obtener frame de la camara, rotarlo y convertirlo a BGR

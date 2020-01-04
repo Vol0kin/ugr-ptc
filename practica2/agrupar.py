@@ -49,16 +49,14 @@ def procesar_clusters_muestra(muestra):
     a partir de los puntos.
 
     Args:
-        muestra: Objeto JSON que representa una muestra.
+        muestra: Objeto en formato JSON que representa una muestra. El objeto
+                 tiene que estar deserializado.
     
     Return:
         Devuelve los clusters que se pueden obtener en la muestra
     """
     # Lista que contendra los clusters de la muestra
     clusters_muestra = []
-
-    # Deserializar muestra
-    muestra = json.loads(muestra)
     
     # Obtener puntos y concatenarlos 
     # Se forma una matriz de parejas [x,y]
@@ -113,7 +111,8 @@ def procesar_clusters_fichero(fichero):
     # Leer fichero, obtener clusters por cada muestra y añadirlos a los existentes
     with open(fichero, "r") as f:
         for muestra in f.readlines()[1:-1]:
-            clusters_fich += procesar_clusters_muestra(muestra)
+            # Deserializar muestra antes de procesarla
+            clusters_fich += procesar_clusters_muestra(json.loads(muestra))
     
     return clusters_fich
 
@@ -147,6 +146,31 @@ def procesar_clusters_directorios(lista_dirs):
     return clusters
 
 
+def generar_informacion_cluster(clusters):
+    """
+    Funcion que genera la informacion necesaria de un grupo de clusters para que
+    pueda ser escrita a disco posteriormente. Se genera una lista que contiene
+    objetos en formato JSON.
+
+    Args:
+        clusters: Clusters de los que extraer la informacion
+    
+    Return:
+        Devuelve una lista con los objetos que contienen la informacion necesaria
+        para poder ser escritos a disco.
+    """
+    info_clusters = [
+        {
+            "numero_cluster": i,
+            "numero_puntos": len(cluster),
+            "puntosX": cluster[:,0].tolist(),
+            "puntosY": cluster[:,1].tolist()
+        }
+        for i, cluster in enumerate(clusters)
+    ]
+
+    return info_clusters
+
 def guardar_clusters(clusters, nom_archivo):
     """
     Funcion que permite guardar un conjunto de clusters a disco.
@@ -157,16 +181,10 @@ def guardar_clusters(clusters, nom_archivo):
     """
     # Escribir informacion
     with open(nom_archivo, "w") as f:
-        for i, cluster in enumerate(clusters):
-            info_cluster = {
-                "numero_cluster": i,
-                "numero_puntos": len(cluster),
-                "puntosX": cluster[:,0].tolist(),
-                "puntosY": cluster[:,1].tolist()
-            }
+        info_clusters = generar_informacion_cluster(clusters)
 
-            # Escribir linea
-            f.write(json.dumps(info_cluster) + "\n")
+        for cluster in info_clusters:
+            f.write(json.dumps(cluster) + "\n")
 
 
 if __name__ == "__main__":
