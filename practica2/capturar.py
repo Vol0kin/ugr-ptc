@@ -58,6 +58,20 @@ def obtener_camara_handler(clientID):
     return camhandle
 
 
+def init_entorno():
+    """
+    Funcion que se conecta con el entorno de V-REP, estableciendo la conexion
+    con el servidor e inicializando los sensores de la camara.
+
+    Return:
+        Devuelve el ID del cliente y un objeto que pertmie manejar la camara.
+    """
+    clientID = establecer_conexion()
+    camara = obtener_camara_handler(clientID)
+
+    return clientID, camara
+
+
 def procesar_ciclo(clientID, segundos, iter):
     """
     Funcion que procesa un ciclo de simulacion. Obtiene los datos y los transforma
@@ -144,11 +158,8 @@ if __name__ == "__main__":
     # Eliminar .json del fichero de entrada (usado para las imagenes)
     nom_fich_img = nom_fichero.replace(".json", "")
 
-    # Establecer conexion con el servidor de V-REP
-    clientID = establecer_conexion()
-
-    # Obtener camara
-    camhandle = obtener_camara_handler(clientID)
+    # Iniciar entorno
+    clientID, camara = init_entorno()
 
     # Crear fichero de salida y escribir cabecera
     fichero_laser = open(nom_fichero, "w")

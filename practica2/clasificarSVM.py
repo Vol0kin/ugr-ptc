@@ -51,9 +51,38 @@ def visualizar_datos(dataframe):
 
 
 def evaluar_modelo(X, y, modelo, cv):
+    """
+    Funcion que evalua un modelo mediante validacion cruzada y obtiene los resultados
+    medios.
+
+    Args:
+        X: Caracteristicas para entrenar el modelo.
+        y: Etiquetas para entrenar el modelo.
+        modelo: Modelo a entrenar.
+        cv: Objeto de validacion cruzada.
+    
+    Return:
+        Devuelve la media de la accuracy.
+    """
     scores = cross_val_score(modelo, X, y, scoring='accuracy', cv=cv, n_jobs=4)
 
     return np.mean(scores)
+
+
+def imprimir_informe(accuracy, y_val, y_pred):
+    """
+    Funcion que imprime por pantalla el informe de los resultados obtenidos
+    al entrenar el clasificador y utilizar el conjunto de validacion para
+    ver como se comporta.
+    """
+    print(f"Acc_val: (TP+TN)/(T+P)  {accuracy:0.4f}")
+
+    print("Matriz de confusión Filas: verdad Columnas: predicción")
+    print(confusion_matrix(y_val, y_pred))
+
+    print("Precision= TP / (TP + FP), Recall= TP / (TP + FN)")
+    print("f1-score es la media entre precisión y recall")
+    print(classification_report(y_val, y_pred))
 
 
 def mostrar_informe_validacion(X_train, y_train, X_val, y_val, modelo):
@@ -68,17 +97,7 @@ def mostrar_informe_validacion(X_train, y_train, X_val, y_val, modelo):
     acc_val = accuracy_score(y_val, y_pred)
 
     # Mostrar resultados
-    print(f"Acc_val: (TP+TN)/(T+P)  {acc_val:0.4f}")
-
-    print("Matriz de confusión Filas: verdad Columnas: predicción")
-    print(confusion_matrix(y_val, y_pred))
-
-    print("Precision= TP / (TP + FP), Recall= TP / (TP + FN)")
-    print("f1-score es la media entre precisión y recall")
-    print(classification_report(y_val, y_pred))
-
-
-
+    imprimir_informe(acc_val, y_val, y_pred)
 
 # Establecer nombres de las columnas
 columnas = ["perimetro", "profundidad", "anchura", "clase"]
@@ -130,7 +149,7 @@ mejor_modelo = modelos["SVM Kernel RBF"]
 
 # Establecer grid de hiperparametros a mejorar
 hyperparam_modelo = {
-    "C": [0.01, 0.1, 1, 2, 3, 4, 5, 10]
+    "C": [0.01, 0.1, 1, 2, 3, 4, 5, 10, 50, 100]
 }
 
 # Establecer parametros del grid
@@ -144,22 +163,16 @@ grid_params = {
 mejor_svm = GridSearchCV(mejor_modelo, **grid_params)
 mejor_svm.fit(X_train, y_train)
 
+print("\n-------------------- Mejor estimador --------------------")
 print(mejor_svm.best_estimator_)
-print(mejor_svm.best_params_)
 
 # Predecir valores
 y_pred = mejor_svm.predict(X_val)
 acc_val = accuracy_score(y_val, y_pred)
 
 # Mostrar resultados
-print(f"Acc_val: (TP+TN)/(T+P)  {acc_val:0.4f}")
-
-print("Matriz de confusión Filas: verdad Columnas: predicción")
-print(confusion_matrix(y_val, y_pred))
-
-print("Precision= TP / (TP + FP), Recall= TP / (TP + FN)")
-print("f1-score es la media entre precisión y recall")
-print(classification_report(y_val, y_pred))
+print("\n-------------------- Resultados finales --------------------")
+imprimir_informe(acc_val, y_val, y_pred)
 
 modelo_final = SVC(kernel="rbf", random_state=SEED, **mejor_svm.best_params_)
 modelo_final.fit(X, y)

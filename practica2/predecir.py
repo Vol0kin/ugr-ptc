@@ -169,5 +169,4 @@ if __name__ == "__main__":
     plot_prediccion(clusters, centroides_clusters, clases)
 
     # Detener simulacion
-    #stop_simulacion_conexion(clientID)
-    
+    stop_simulacion_conexion(clientID)
