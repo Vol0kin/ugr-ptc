@@ -66,6 +66,12 @@ def calcular_orientaciones(objetos):
     
 
 def escribir_comienzo_fichero(fichero):
+    """
+    Funcion que escribe el comienzo del fichero de resultados.
+
+    Args:
+        fichero: Fichero donde escribir.
+    """
     lineas_fich = """<!DOCTYPE html>
     <html>
         <head>
@@ -87,6 +93,15 @@ def escribir_comienzo_fichero(fichero):
 
 
 def escribir_fila(fich, valor_real, valor_pred, dist, img):
+    """
+    Funcion que escribe una fila de la tabla en el fichero correspondiente.
+
+    Args:
+        fich: Fichero donde escribir.
+        valor_real: Valor real de la clase.
+        valor_pred: Valor predicho de la clase.
+        img: Ruta de la imagen que insertar.
+    """
     fila = f"""
                 <tr>
                     <td>{valor_real}</td>
@@ -99,6 +114,12 @@ def escribir_fila(fich, valor_real, valor_pred, dist, img):
 
 
 def escribir_final_fichero(fichero):
+    """
+    Funcion que escribe el final del fichero de resultados.
+
+    Args:
+        fichero: Fichero donde escribir.
+    """
     lineas_final = """
             </table>
         </body>
@@ -113,18 +134,33 @@ if __name__ == "__main__":
     clientID, camara = init_entorno()
 
     # Predecir escena
-    _, _, centroides_clusters, clases_cluster = predecir(clientID)
+    _, _, centroides_clusters, clases_cluster, centroides_solitarios, clases_solitarios = predecir(clientID)
 
     # Obtener referencia al robot
     _, robot = vrep.simxGetObjectHandle(clientID, 'Pioneer_p3dx', vrep.simx_opmode_oneshot_wait)
     _, motor_izq = vrep.simxGetObjectHandle(clientID, 'Pioneer_p3dx_leftMotor', vrep.simx_opmode_oneshot_wait)
     _, motor_dcha = vrep.simxGetObjectHandle(clientID, 'Pioneer_p3dx_rightMotor', vrep.simx_opmode_oneshot_wait)
+    
+    # Concatenar los centroides emparejados con los solitarios ademas de las clases
+    centroides_clusters = np.concatenate([centroides_clusters, centroides_solitarios.reshape(1,-1)], axis=0)
+    clases_cluster += clases_solitarios
 
     # Obtener las distancias de los centroides de los clusters (los objetos)
     dist_cent_cluster = calcular_distancias_objetos(centroides_clusters)
 
     # Obtener las orientaciones
     orientaciones = calcular_orientaciones(centroides_clusters)
+    
+    # Establecer valores reales
+    valores_reales = ["Pierna", "No pierna", "Pierna", "Pierna"] + ["No pierna"] * 7 + ["Pierna", "No pierna"] * 2 + ["No pierna"]
+
+    # Ordenar informacion segun el orden de las orientaciones
+    idx_ord_orient = np.argsort(orientaciones)
+    orientaciones = orientaciones[idx_ord_orient]
+    clases_cluster = np.array(clases_cluster)
+    clases_cluster = clases_cluster[idx_ord_orient]
+    valores_reales = np.array(valores_reales)
+    valores_reales = valores_reales[idx_ord_orient]
 
     # Crear directorio de salida de imagenes si no existe
     out_dir = "media"
@@ -136,11 +172,6 @@ if __name__ == "__main__":
     for i, gamma in enumerate(orientaciones):
         rotar_robot(gamma, robot, motor_izq, motor_dcha)
         capturar_guardar_imagen(clientID, camara, f"{out_dir}/objeto{i}.jpg")
-    
-    # Establecer valores reales
-    valores_reales = ["Pierna", "No pierna", "Pierna", "Pierna"]
-    valores_reales += ["No pierna"] * 7
-    valores_reales += ["Pierna", "No pierna"] * 2
 
     # Obtener lista con los ficheros de las imagenes
     imagenes = list(glob.glob("media/objeto*.jpg"))

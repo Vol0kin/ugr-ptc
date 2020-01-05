@@ -55,10 +55,14 @@ def calcular_punto_medio_centroides(centroides, clases):
     
     Return:
         Devuelve los puntos medios para los centroides que se pueden relacionar
-        correctamente ademas de la clase a la que pertenecen
+        correctamente, la clase a la que pertenecen, los centroides tal cual que no son
+        emparejados y la clase a la que pertenecen 
     """
     puntos_medios = []
     clases_puntos_medios = []
+
+    # Conjunto de indices de puntos que han sido emparejados
+    emparejados = set()
 
     # Conjunto con indices ya procesados (evitar puntos repetidos)
     indx_procesado = set()
@@ -83,8 +87,20 @@ def calcular_punto_medio_centroides(centroides, clases):
             puntos_medios.append(punto_medio.reshape(1,-1))
             indx_procesado.add(mas_cercano)
             clases_puntos_medios.append(clases[i])
+
+            # Añadir los puntos a los emparejados
+            emparejados.add(i)
+            emparejados.add(mas_cercano)
     
-    return np.concatenate(puntos_medios, axis=0), clases_puntos_medios
+    # Obtener los puntos no emparejados y la clase a la que pertenecen
+    puntos_solitarios = [centroides[i] for i in range(len(centroides)) if i not in emparejados]
+    clases_solitarias = [clases[i] for i in range(len(clases)) if i not in emparejados]
+
+    
+    return (np.concatenate(puntos_medios, axis=0),
+            clases_puntos_medios,
+            np.concatenate(puntos_solitarios, axis=0),
+            clases_solitarias)
 
 
 def plot_prediccion(clusters, centroides_clusters, clases):
@@ -130,8 +146,9 @@ def predecir(clientID):
         clientID: ID del cliente conectado al servidor de V-REP.
     
     Return:
-        Devuelve los clusters detectacos, las clases de los clusters,
-        los centroides entre los clusters y las clases de dichos centroides
+        Devuelve los clusters detectados, las clases de los clusters,
+        los centroides entre los clusters, las clases de dichos centroides,
+        los centroides que no se pueden emparejar y las clases de dichos centroides
     """
     # Obtener la muestra
     muestra = procesar_ciclo(clientID, 0, 0)
@@ -153,9 +170,9 @@ def predecir(clientID):
     centroides = calcular_centroides_clusters(clusters)
 
     # Obtener los puntos medios de las lineas que unen los centroides/clusters proximos
-    centroides_clusters, clases_centroides = calcular_punto_medio_centroides(centroides, clases)
+    centroides_clusters, clases_centroides, puntos_solitarios, clases_solitarios = calcular_punto_medio_centroides(centroides, clases)
 
-    return clusters, clases, centroides_clusters, clases_centroides
+    return clusters, clases, centroides_clusters, clases_centroides, puntos_solitarios, clases_solitarios
 
 
 if __name__ == "__main__":
@@ -163,7 +180,7 @@ if __name__ == "__main__":
     clientID, camara = init_entorno()
 
     # Obtener los clusters, los centroides de los clusters y las clases
-    clusters, clases, centroides_clusters, _ = predecir(clientID)
+    clusters, clases, centroides_clusters, _, _, _ = predecir(clientID)
 
     # Mostrar predicción
     plot_prediccion(clusters, centroides_clusters, clases)
