@@ -78,18 +78,6 @@ def procesar_clusters_muestra(muestra):
         # Incrementar indice en la longitud del cluster obtenido, de forma que
         # no se procesen dos veces los mismos puntos
         i += len(cluster)
-    
-    """
-    plt.axis('equal')
-
-    plt.axis([0, 4, -2, 2])
-    plt.clf()    
-    plt.plot(puntos_x, puntos_y, '.')
-
-    for pts in clusters_muestra:
-        plt.plot(pts[:,0], pts[:,1], '.')
-    plt.show()
-    """
 
     return clusters_muestra
 
@@ -170,6 +158,7 @@ def generar_informacion_cluster(clusters):
     ]
 
     return info_clusters
+
 
 def guardar_clusters(clusters, nom_archivo):
     """
