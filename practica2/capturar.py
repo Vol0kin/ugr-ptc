@@ -113,6 +113,28 @@ def procesar_ciclo(clientID, segundos, iter):
     return lectura
 
 
+def capturar_guardar_imagen(clientID, camara, nombre_fich):
+    """
+    Funcion que permite tomar una imagen del simulador utilizando la camara
+    y guardarla a disco para utilizarla posteriormente.
+
+    Arg:
+        clientID: ID del cliente conectado al servidor de V-REP.
+        camara: Objeto que hace referencia a la camara.
+        nombre_fich: Nombre de salida que se le quiere dar al fichero.
+    """
+    # Obtener frame de la camara, rotarlo y convertirlo a BGR
+    _, resolution, image = vrep.simxGetVisionSensorImage(clientID, camara, 0, vrep.simx_opmode_buffer)
+    img = np.array(image, dtype = np.uint8)
+    img.resize([resolution[0], resolution[1], 3])
+    img = np.rot90(img,2)
+    img = np.fliplr(img)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+    # Guardar imagen
+    cv2.imwrite(nombre_fich, img)
+
+
 def stop_simulacion_conexion(clientID):
     """
     Funcion que detiene la simulacion y la conexion con el servidor de V-REP
@@ -171,19 +193,11 @@ if __name__ == "__main__":
         # Obtener lectura y guardarla
         lectura = procesar_ciclo(clientID, segundos, iter)
         fichero_laser.write(json.dumps(lectura)+'\n')
-        
-        # Obtener frame de la camara, rotarlo y convertirlo a BGR
-        _, resolution, image=vrep.simxGetVisionSensorImage(clientID, camhandle, 0, vrep.simx_opmode_buffer)
-        img = np.array(image, dtype = np.uint8)
-        img.resize([resolution[0], resolution[1], 3])
-        img = np.rot90(img,2)
-        img = np.fliplr(img)
-        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 
         # Guardar imagen si es en la primera o la ultima iteracion
         if iter == 0 or iter == ciclos_lectura - 1:
             print(f"\tGuardando imagen en iteracion {iter}")
-            cv2.imwrite(nom_fich_img + str(iter) + ".jpg", img)
+            capturar_guardar_imagen(clientID, camara, nom_fichero+str(iter)+".jpg")
     
     time.sleep(1)
 
