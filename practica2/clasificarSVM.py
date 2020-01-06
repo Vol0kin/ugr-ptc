@@ -99,6 +99,7 @@ def mostrar_informe_validacion(X_train, y_train, X_val, y_val, modelo):
     # Mostrar resultados
     imprimir_informe(acc_val, y_val, y_pred)
 
+
 # Establecer nombres de las columnas
 columnas = ["perimetro", "profundidad", "anchura", "clase"]
 
@@ -130,12 +131,10 @@ modelos = {
     "SVM Kernel RBF": SVC(kernel="rbf", random_state=SEED)
 }
 
-resultados_modelos = {}
 
 print("-------------------- Validacion de los modelos --------------------")
 for nombre, modelo in modelos.items():
     score_medio = evaluar_modelo(X_train, y_train, modelo, cv)
-    resultados_modelos[nombre] = score_medio
     print(f"Modelo evaluado: {nombre} Accuracy media en 5-fold CV: {score_medio:0.4f}")
 
 print("\n-------------------- Resultados de entrenamiento de los modelos --------------------")
@@ -174,7 +173,9 @@ acc_val = accuracy_score(y_val, y_pred)
 print("\n-------------------- Resultados finales --------------------")
 imprimir_informe(acc_val, y_val, y_pred)
 
+# Entrenar modelo final con todos los datos
 modelo_final = SVC(kernel="rbf", random_state=SEED, **mejor_svm.best_params_)
 modelo_final.fit(X, y)
 
+# Guardar modelo para usos futuros
 joblib.dump(modelo_final, "modelo.joblib")

@@ -152,6 +152,8 @@ if __name__ == "__main__":
     orientaciones = calcular_orientaciones(centroides_clusters)
     
     # Establecer valores reales
+    # IMPORTANTE: LOS VALORES SON ESTATICOS, CON LO CUAL SE RECOMIENDA NO
+    # MODIFICAR LA ESCENA, YA QUE NO SE CORRESPONDERAN CON LOS OBJETOS REALES
     valores_reales = ["Pierna", "No pierna", "Pierna", "Pierna"] + ["No pierna"] * 7 + ["Pierna", "No pierna"] * 2 + ["No pierna"]
 
     # Ordenar informacion segun el orden de las orientaciones

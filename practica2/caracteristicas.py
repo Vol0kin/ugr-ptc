@@ -191,6 +191,7 @@ if __name__ == "__main__":
     # Nombres de los ficheros de salida
     piernas = "caracteristicasPiernas.dat"
     no_piernas = "caracteristicasNoPiernas.dat"
+    
     # Generar caracteristicas para los clusters
     generar_caracteristicas_clusters("clustersPiernas.json", piernas, 1)
     generar_caracteristicas_clusters("clustersNoPiernas.json", no_piernas, 0)
