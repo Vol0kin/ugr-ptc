@@ -1,0 +1,3 @@
+[submodule "boost-python"]
+	path = boost-python
+	url = https://github.com/Vol0kin/boost-python
